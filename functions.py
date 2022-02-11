@@ -1,3 +1,4 @@
+import csv
 import json
 from classes import word
 from classes import letter
@@ -43,6 +44,7 @@ def letter_maker(letter_list):
 
 
 def word_maker(letters, dictionary):
+    """Turns each word into a 'word' object"""
     new_dictionary = []
     for entry in dictionary:
         letter_score = get_letter_score(entry, letters)
@@ -55,6 +57,7 @@ def word_maker(letters, dictionary):
 
 
 def get_letter_score(word, letters):
+    """Scores the words based on letter frequency"""
     letter_score = 0
     for each in list(word):
         for every in letters:
@@ -64,6 +67,7 @@ def get_letter_score(word, letters):
 
 
 def get_four_score(entry, dictionary):
+    """Scores the words based on four letter matches"""
     four_matches = []
     four_score = 0
     for each in dictionary:
@@ -74,6 +78,7 @@ def get_four_score(entry, dictionary):
 
 
 def get_three_score(entry, dictionary):
+    """Scores the word based on three letter matches"""
     three_matches = []
     three_score = 0
     for each in dictionary:
@@ -81,3 +86,16 @@ def get_three_score(entry, dictionary):
             three_matches.append(each)
             three_score += 1
     return three_score, three_matches
+
+
+def make_csv(words):
+    """Makes the CSV output"""
+    with open('Output/five_letter_words.csv', 'w+') as sheet:
+        writer = csv.writer(sheet)
+        top_row = ['Name', 'Letter Score', 'Four Letter Matches', 'Three Letter Matches', 'Four Letter Words',
+                   'Three Letter Words', 'Total Matches']
+        writer.writerow(top_row)
+        for entry in words:
+            new_row = [entry.identity, entry.letter_score, entry.four_score,
+                       entry.three_score, entry.four_matches, entry.three_matches, entry.total_match_score]
+            writer.writerow(new_row)
